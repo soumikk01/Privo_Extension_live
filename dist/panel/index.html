@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Deccan Capture</title>
+		<script type="module" crossorigin src="./assets/index-CKOmsXX3.js"></script>
+		<link rel="stylesheet" crossorigin href="./assets/index-f33HllQ6.css">
+	</head>
+	<body>
+		<header class="header">
+			<div class="brand">
+				<p class="eyebrow">// Deccan AI</p>
+				<h1>Verified Capture</h1>
+			</div>
+			<div class="header-actions">
+				<button id="restart" class="btn btn-ghost hidden" title="Stop and start over">↻ Restart</button>
+				<div id="status" class="status status-idle">
+					<span class="status-dot"></span>
+					<span id="status-label">Ready</span>
+				</div>
+			</div>
+		</header>
+
+		<!-- STAGE: exactly one of these is visible at any moment -->
+
+		<!-- 1 · idle: write the task -->
+		<section id="composer" class="card composer">
+			<textarea
+				id="task"
+				rows="3"
+				placeholder="e.g. Log in, go to My Orders, and take a sealed screenshot of the last order"
+				spellcheck="false"
+			></textarea>
+			<div class="composer-foot">
+				<span class="kbd-hint"><kbd>⌘</kbd><kbd>↵</kbd> to run</span>
+				<button id="run" class="btn btn-primary">Run</button>
+			</div>
+		</section>
+
+		<!-- 2 · running: what's happening right now -->
+		<section id="now" class="card now hidden">
+			<div class="now-row">
+				<span class="spinner" aria-hidden="true"></span>
+				<div class="now-main">
+					<p id="now-action">Starting…</p>
+					<p id="now-meta" class="now-meta">step 0 · 0:00</p>
+				</div>
+				<button id="stop" class="btn btn-danger">Stop</button>
+			</div>
+			<details class="task-toggle">
+				<summary>View task</summary>
+				<p id="running-task"></p>
+			</details>
+		</section>
+
+		<!-- 3 · paused: the agent needs you -->
+		<section id="askuser" class="card ask hidden">
+			<p class="ask-label">Your turn — the agent is waiting</p>
+			<p id="askuser-q" class="ask-q"></p>
+			<div class="ask-row">
+				<input id="askuser-a" type="text" placeholder="Type your answer…" autocomplete="off" />
+				<button id="askuser-send" class="btn btn-primary">Send</button>
+			</div>
+			<button id="askuser-done" class="btn btn-secondary ask-done">Done</button>
+		</section>
+
+		<!-- 4 · finished: the outcome -->
+		<section id="result" class="card result hidden">
+			<p id="result-title" class="result-title"></p>
+			<p id="result-body" class="result-body"></p>
+			<img id="result-img" class="result-img hidden" alt="Sealed capture preview" />
+			<div class="row">
+				<button id="result-download" class="btn btn-primary hidden">Download PNG</button>
+				<button id="result-retry" class="btn btn-secondary hidden">Try again</button>
+				<button id="result-new" class="btn btn-secondary">New task</button>
+			</div>
+		</section>
+
+		<!-- progress -->
+		<section class="section hidden" id="activity-section">
+			<div class="section-head"><h2>Steps</h2></div>
+			<div class="feed-wrap"><div id="feed" class="feed" aria-live="polite"></div></div>
+		</section>
+
+		<!-- output -->
+		<section class="section">
+			<div class="section-head">
+				<h2>Sealed captures <span id="shots-count" class="count hidden"></span></h2>
+				<div class="head-actions">
+					<button id="capture-now" class="btn btn-ghost">+ Capture now</button>
+					<button id="shots-clear" class="btn btn-ghost hidden">Clear</button>
+				</div>
+			</div>
+			<div id="shots" class="shots"></div>
+		</section>
+
+		<footer class="foot">
+			<span class="foot-right">
+				<span id="backend-dot" class="backend-dot" title="backend status"></span>
+				<a id="validator-link" class="linklike" href="#" target="_blank" rel="noopener">Validator</a>
+			</span>
+		</footer>
+
+	</body>
+</html>

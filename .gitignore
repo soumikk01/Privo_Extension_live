@@ -1,13 +1,15 @@
-﻿# ── Dependencies ──────────────────────────────────────────────────────────────
+# ── Dependencies ──────────────────────────────────────────────────────────────
 node_modules/
 
 # ── Build output ──────────────────────────────────────────────────────────────
-dist/
+# NOTE: dist/ is intentionally NOT ignored — Chrome loads the extension directly
+# from dist/. It must be committed so the extension works after cloning.
 
 # ── Environment / secrets ─────────────────────────────────────────────────────
 .env
 .env.local
 .env.*.local
+# .env.example is intentionally tracked (safe template, no real secrets)
 
 # ── Logs ──────────────────────────────────────────────────────────────────────
 *.log
