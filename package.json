@@ -1,9 +1,9 @@
 {
-    "name": "deccan-page-agent",
+    "name": "privo",
     "private": true,
     "version": "0.1.0",
     "type": "module",
-    "description": "Deccan AI internal web-automation agent extension. Engine adapted from alibaba/page-agent (MIT).",
+    "description": "Privo \u2014 Control web pages with natural language: multi-tab automation plus screenshot capture.",
     "scripts": {
         "build": "vite build -c build/vite.panel.ts && vite build -c build/vite.background.ts && vite build -c build/vite.content.ts",
         "typecheck": "tsc --noEmit",
@@ -21,3 +21,4 @@
         "vite-plugin-css-injected-by-js": "^3.5.2"
     }
 }
+
