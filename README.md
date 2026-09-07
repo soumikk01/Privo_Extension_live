@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/soumikk01/Privo_Extension_live/main/public/icons/icon128.png" width="96" height="96" alt="Privo logo" />
+  <img src="public/icons/icon128.png" width="96" height="96" alt="Privo logo" />
 </p>
 
 <h1 align="center">Privo — Chrome Extension</h1>
