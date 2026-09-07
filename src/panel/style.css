@@ -144,14 +144,43 @@ kbd {
 	max-height: 120px; overflow-y: auto; overflow-wrap: anywhere;
 }
 
-/* spinner */
+/* logo spinner — filled paths, sequential pulse */
 .spinner {
-	flex: none; width: 16px; height: 16px;
-	border: 2px solid var(--accent-soft); border-top-color: var(--accent);
-	border-radius: 50%;
-	animation: spin 0.9s linear infinite;
+	flex: none; width: 30px; height: 30px;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+.spinner svg { width: 30px; height: 30px; display: block; }
+
+/* all paths are filled, no stroke — exact logo look */
+.spinner svg path { stroke: none; }
+
+/* path 1 — teal top */
+.sp-p1 {
+	fill: #44767D;
+	animation: privo-seq 2s ease-in-out 0.0s infinite;
+}
+/* path 2 — coral bottom */
+.sp-p2 {
+	fill: #EF7162;
+	animation: privo-seq 2s ease-in-out 0.25s infinite;
+}
+/* path 3 — highlight (use accent blue instead of white so it's visible on light bg) */
+.sp-p3 {
+	fill: #5a8fc4;
+	animation: privo-seq 2s ease-in-out 0.5s infinite;
+}
+/* path 4 — navy left */
+.sp-p4 {
+	fill: #2C4763;
+	animation: privo-seq 2s ease-in-out 0.75s infinite;
+}
+
+/* each path dims to 30% then brightens back to 100%, staggered */
+@keyframes privo-seq {
+	0%   { opacity: 0.3; }
+	25%  { opacity: 1;   }
+	75%  { opacity: 1;   }
+	100% { opacity: 0.3; }
+}
 
 /* ask */
 .ask { padding: 12px 14px; border-color: var(--warn); background: var(--warn-soft); }
@@ -350,7 +379,11 @@ kbd {
 .status-waiting { color: var(--warn); border-color: var(--warn); }
 .status-waiting .status-dot { background: var(--warn); animation: pulse 1.2s ease-in-out infinite; }
 
+.logo-spinner { width: 24px; height: 24px; animation: logo-spinner 2s linear infinite; }
+.logo-spinner path { fill: var(--warn); }
+@keyframes logo-spinner { to { transform: rotate(360deg); } }
+
 @media (prefers-reduced-motion: reduce) {
-	.status-dot, .spinner, .entry.thinking .entry-detail::after { animation: none; }
+	.status-dot, .logo-spinner, .entry.thinking .entry-detail::after { animation: none; }
 	.btn, .shot { transition: none; }
 }
