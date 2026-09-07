@@ -1,6 +1,16 @@
-# PRIVO Page Agent — Chrome Extension
+<p align="center">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 157.8 157.8" width="96" height="96">
+    <style>.cls-1{fill:#44767D}.cls-2{fill:#EF7162}.cls-3{fill:#FFFFFF}.cls-4{fill:#2C4763}.cls-5{fill:none}</style>
+    <path class="cls-1" d="m74 21.6c32.6-2.6 62 23.4 62.7 54.4 0.2 9.6-8.2 23.6-26.7 24.5-12.4-0.1-25.4-9.1-25.4-22.6 0-3.6 1.4-6.9 3.4-10.1 3.1-4.8 4.9-10.4 5.2-16.9 0.1-11-7.6-25-19.2-29.3z"/>
+    <path class="cls-2" d="m133.8 96.3c-5 15.7-21.7 38.8-53.7 40-20 0.3-32.9-8.6-37.4-25.3-4-21 12.7-29.4 22.3-29.3 7 0 12.5 2.6 17 8.4 3.5 6.2 12.1 15.8 28.6 16.4 8.8 0 17-3 23.2-10.2z"/>
+    <path class="cls-3" d="m135.7 89.2c-0.4 2.4-1 4.8-1.8 7.2-3.9 3.9-10.8 10-23.4 10.1-13-0.1-22.7-6.7-28-15.2l-4.6-10.7c-3.9-0.8-6.3-1.8-11.3-1.8-12 0-23.6 8.7-26.6 20.3-1.7 9.2 1.6 19.8 7.6 27.5-2.2-1.5-4.7-3.6-7.3-5.7-3.1-5.5-4.5-15-2.9-22.5 2.3-11.4 13.5-22.4 29.2-22.5 3.5 0 7.3 0.7 11.3 1.9 4-8.2 7.9-9 10.8-17.5 3.6-10.3 1.5-19.8-5-27.4-4.7-5.4-11.1-9.3-17.2-10.1 2.3-0.6 5.2-1 7.4-1.2 10.7 3.8 19.4 14.9 19.3 28.4-0.6 15.7-8.6 19-12.8 29.3l2.9 6.9c3.6 8.2 12.7 16.5 25.3 17.1 10.5 0.7 21.3-4.6 27.1-14.1z"/>
+    <path class="cls-4" d="m40.3 120.9c-11.6-10.9-19-24.8-19-40.9 0-15.7 6.3-32.4 23.1-46.5 3.7-2.9 9.4-8.2 18.6-8.3 11.6-0.2 24.1 9.2 24.2 24.8-0.3 10.3-8 23.1-20.7 25.8-13.3 0.6-26.1 9.6-29.5 22-1.6 6.5 0 16.6 3.3 23.1z"/>
+    <rect class="cls-5" y="-.1" width="157.9" height="157.9"/>
+  </svg>
+</p>
 
-Internal PRIVO AI tool. Automates browser tasks with natural language and produces cryptographically sealed page captures — PNG screenshots watermarked with a tamper-evident badge whose SHA-256 hash is registered on a backend server, so any later pixel edit breaks verification.
+<h1 align="center">Privo — Chrome Extension</h1>
+<p align="center">Automates browser tasks with natural language &amp; produces cryptographically sealed page captures.</p>
 
 > **Requires Chrome 116+** (Manifest V3 side panel API, minimum version for `chrome.sidePanel`).
 
@@ -331,178 +341,154 @@ The agent runs on the Anthropic API via the OpenAI-compatible endpoint. These ar
 ## Project layout (every file explained)
 
 ```text
-PRIVO-page-agent/
+Privo-extension/                  ← this repo (Chrome extension)
 │
-├── build/
-│   ├── shared.ts                 Shared Vite plugin config (alias resolution,
-│   │                             CSS injection, markdown raw import)
-│   ├── vite.panel.ts             Panel entry: src/panel/index.html → dist/panel/
-│   ├── vite.background.ts        Background SW: src/entrypoints/background.ts → dist/background.js
-│   └── vite.content.ts           Content script: src/entrypoints/content.ts → dist/content.js
+├── build/                        Vite build configurations
+│   ├── shared.ts                 Shared plugins: aliases, CSS injection, md raw import
+│   ├── vite.panel.ts             Panel build  →  dist/panel/
+│   ├── vite.background.ts        Service worker build  →  dist/background.js
+│   └── vite.content.ts           Content script build  →  dist/content.js
 │
-├── public/
+├── dist/                         Built extension — load this in Chrome
+│   ├── background.js             Compiled service worker
+│   ├── content.js                Compiled content script
+│   ├── manifest.json             Copied from public/ at build time
+│   ├── icons/
+│   │   ├── icon.svg              Source SVG (Privo logo, transparent background)
+│   │   ├── icon64.png            Toolbar icon (64×64)
+│   │   └── icon128.png           Extension store icon (128×128)
+│   └── panel/
+│       ├── index.html            Side panel HTML
+│       └── assets/               Bundled JS + CSS
+│
+├── docs/
+│   ├── FEASIBILITY.md            Technical feasibility notes (design archive)
+│   └── PRICING.md                LLM token cost model and pricing analysis
+│
+├── proxy/                        Lightweight LLM proxy (alternative to full backend)
+│   ├── README.md                 Setup instructions for local + Cloudflare Worker
+│   ├── server.mjs                Local Node.js proxy (zero dependencies)
+│   └── worker.js                 Cloudflare Worker variant (deploy with wrangler)
+│
+├── public/                       Static assets copied to dist/ by Vite
 │   ├── manifest.json             Chrome MV3 manifest — permissions, entry points, icons
 │   └── icons/
+│       ├── icon.svg              Source SVG (Privo logo, transparent background)
 │       ├── icon64.png            Toolbar icon (64×64)
 │       └── icon128.png           Extension store icon (128×128)
 │
 ├── src/
-│   │
-│   ├── config.ts                 Central config:
-│   │                             - DEFAULT_LLM_CONFIG (baseURL, model, maxSteps,
-│   │                               transformRequestBody to fix tool_choice for
-│   │                               Anthropic's OpenAI-compat endpoint)
+│   ├── config.ts                 Central runtime config:
+│   │                             - DEFAULT_LLM_CONFIG (baseURL → localhost:8787/v1,
+│   │                               model, maxSteps, transformRequestBody)
 │   │                             - BACKEND_URL (derived from baseURL)
-│   │                             - EXTENSION_SECRET (from VITE_EXTENSION_SECRET env)
-│   │                             - llmFetch (injects X-Extension-Secret header)
+│   │                             - EXTENSION_SECRET (from VITE_EXTENSION_SECRET)
+│   │                             - llmFetch (auto-injects X-Extension-Secret header)
 │   │
 │   ├── seal.ts                   Sealed capture pipeline:
-│   │                             sealCapture() coordinates suppress → capture →
-│   │                             watermark → sha256 → register → gallery
+│   │                             suppress mask → capture tab → watermark →
+│   │                             sha256 → POST /captures → save to gallery
 │   │
 │   ├── agent/
-│   │   ├── MultiPageAgent.ts     Extends PageAgentCore:
-│   │   │                         - Creates TabsController + RemotePageController
-│   │   │                         - Injects tab tools and capture_screenshot tool
-│   │   │                         - Detects language from navigator.language
+│   │   ├── MultiPageAgent.ts     Extends PageAgentCore with multi-tab support:
+│   │   │                         - Wires TabsController + RemotePageController
+│   │   │                         - Injects tab tools + capture_screenshot tool
 │   │   │                         - Writes agentHeartbeat to storage every 1s
-│   │   │                         - Sets isAgentRunning in storage on status change
 │   │   │
-│   │   ├── RemotePageController.ts          Interface / coordinator — routes page
-│   │   │                                    control calls to the correct tab
+│   │   ├── RemotePageController.ts          Coordinator — routes page-control
+│   │   │                                    calls to the correct tab context
 │   │   │
-│   │   ├── RemotePageController.background.ts  Receives PAGE_CONTROL messages from
-│   │   │                                        panel (via background SW) and
-│   │   │                                        forwards to the target tab's content
-│   │   │                                        script via chrome.tabs.sendMessage.
+│   │   ├── RemotePageController.background.ts  Receives PAGE_CONTROL messages,
+│   │   │                                        forwards to content script via
+│   │   │                                        chrome.tabs.sendMessage.
 │   │   │                                        Enforces PROXIABLE_ACTIONS allowlist.
 │   │   │
-│   │   ├── RemotePageController.content.ts  Receives PAGE_CONTROL messages in the
-│   │   │                                    content script context and executes them
-│   │   │                                    using the vendor PageController.
+│   │   ├── RemotePageController.content.ts  Executes PAGE_CONTROL actions inside
+│   │   │                                    the page via vendor PageController.
 │   │   │                                    Enforces ALLOWED_ACTIONS allowlist.
-│   │   │                                    default case throws (no silent pass-through).
 │   │   │
-│   │   ├── TabsController.ts     Tab state: list of open tabs, current tab ID,
-│   │   │                         syncTabs(), openNewTab(), switchToTab(),
-│   │   │                         closeTab(), waitUntilTabLoaded(), dispose()
+│   │   ├── TabsController.ts               Tab state management:
+│   │   │                                   syncTabs, openNewTab, switchToTab,
+│   │   │                                   closeTab, waitUntilTabLoaded, dispose
 │   │   │
-│   │   ├── TabsController.background.ts  Handles TAB_CONTROL messages.
-│   │   │                                 Calls chrome.tabs.create/update/remove.
-│   │   │                                 Validates URL with isSafeUrl() before
-│   │   │                                 chrome.tabs.create.
+│   │   ├── TabsController.background.ts    Handles TAB_CONTROL messages.
+│   │   │                                   chrome.tabs.create/update/remove.
+│   │   │                                   URL safety-checked with isSafeUrl().
 │   │   │
-│   │   ├── tabTools.ts           LLM tool definitions for tab operations.
-│   │   │                         isSafeUrl() (exported, used by both tool layer
-│   │   │                         and background handler for defence-in-depth).
-│   │   │                         open_new_tab / switch_to_tab / close_tab tools.
+│   │   ├── tabTools.ts                     LLM tool definitions:
+│   │   │                                   open_new_tab / switch_to_tab / close_tab
+│   │   │                                   isSafeUrl() — SSRF guard (shared)
 │   │   │
-│   │   └── system_prompt.md      Agent system prompt. Contains:
-│   │                             <security> block (adversarial content warning)
-│   │                             <browser_rules> (interaction constraints)
-│   │                             <task_completion_rules> (when to call done)
-│   │                             <reasoning_rules> (thinking patterns)
+│   │   └── system_prompt.md                Agent system prompt:
+│   │                                       <security>, <browser_rules>,
+│   │                                       <task_completion_rules>, <reasoning_rules>
 │   │
 │   ├── entrypoints/
 │   │   ├── background.ts         Service worker entry point.
-│   │   │                         Single onMessage listener with sender.id guard.
-│   │   │                         Dispatches TAB_CONTROL / PAGE_CONTROL /
-│   │   │                         SCREENSHOT_CONTROL to their handlers.
-│   │   │                         Sets openPanelOnActionClick.
+│   │   │                         Routes TAB_CONTROL / PAGE_CONTROL /
+│   │   │                         SCREENSHOT_CONTROL to handlers.
 │   │   │
 │   │   └── content.ts            Content script entry point.
-│   │                             Initialises RemotePageController.content.
-│   │                             Starts SimulatorMask (visual cursor overlay).
+│   │                             Boots RemotePageController + SimulatorMask.
 │   │
 │   ├── panel/
-│   │   ├── index.html            Side panel HTML.
-│   │   │                         All element IDs referenced by main.ts.
-│   │   │                         Four stage cards (composer/now/ask/result).
-│   │   │                         Activity feed and captures gallery sections.
-│   │   │                         Footer with backend dot and validator link.
-│   │   │
-│   │   ├── main.ts               Panel UI controller:
-│   │   │                         - Stage machine (showStage)
-│   │   │                         - Status label (idle/running/waiting/done/error)
-│   │   │                         - Run/stop/restart button handlers
-│   │   │                         - ask_user integration (pauses agent, resolves
-│   │   │                           with typed answer or 'done')
-│   │   │                         - Activity feed (onActivity, makeEntry, clearThinking)
-│   │   │                         - Run meta timer (step count, elapsed mm:ss)
-│   │   │                         - Result display with capture thumbnail
-│   │   │                         - Gallery rendering (renderShots, downloadCapture)
-│   │   │                         - Backend health polling (pollBackend every 15s)
-│   │   │                         - Cmd/Ctrl+Enter shortcut to run task
-│   │   │                         - Textarea auto-resize
-│   │   │
-│   │   ├── style.css             Panel styles.
-│   │   │                         CSS custom properties for theming.
-│   │   │                         Responsive light/dark mode.
-│   │   │
-│   │   └── watermark.ts          Canvas-based watermarking utilities:
-│   │                             - watermarkImage() — draws badge on canvas
-│   │                             - sha256Hex() — SHA-256 of a Blob
-│   │                             - blobToDataUrl() — FileReader wrapper
-│   │                             - newCaptureId() — DC-YYMMDD-XXXXXXXX format
-│   │                             - safeHost() — hostname extraction with fallback
+│   │   ├── index.html            Side panel HTML (4 stage cards + activity feed)
+│   │   ├── main.ts               Panel UI controller (stage machine, run/stop,
+│   │   │                         ask_user, activity feed, gallery, backend polling)
+│   │   ├── style.css             Panel styles with CSS custom properties
+│   │   └── watermark.ts          watermarkImage(), sha256Hex(), newCaptureId(),
+│   │                             blobToDataUrl(), safeHost()
 │   │
 │   ├── tools/
-│   │   ├── screenshot.ts         capture_screenshot LLM tool definition.
-│   │   │                         Called by the agent when a capture is needed.
-│   │   │                         Calls sealCapture() and returns the capture ID.
-│   │   │
-│   │   └── screenshot.background.ts  SCREENSHOT_CONTROL message handler.
-│   │                                  Calls chrome.tabs.captureVisibleTab (only
-│   │                                  possible in service worker context).
-│   │                                  Handles maskSuppressed flag timing.
+│   │   ├── screenshot.ts         capture_screenshot LLM tool — calls sealCapture()
+│   │   └── screenshot.background.ts  SCREENSHOT_CONTROL handler.
+│   │                                  Calls chrome.tabs.captureVisibleTab.
 │   │
-│   └── vendor/                   Upstream page-agent engine (MIT).
-│       ├── LICENSE               MIT license for the upstream code
+│   └── vendor/                   Upstream page-agent engine (MIT — do not modify)
+│       ├── LICENSE
 │       ├── core/
-│       │   ├── PageAgentCore.ts  Main agent loop, tool dispatch, LLM integration.
-│       │   │                     MODIFIED: sanitizeBrowserContent() applied at all
-│       │   │                     6 locations where untrusted page content enters
-│       │   │                     the LLM prompt.
-│       │   ├── types.ts          Shared TypeScript types
+│       │   ├── PageAgentCore.ts  Agent loop + LLM integration
+│       │   │                     [privo security] sanitizeBrowserContent() patches
+│       │   ├── types.ts
+│       │   ├── env.d.ts
 │       │   ├── prompts/
-│       │   │   └── system_prompt.md  Vendor system prompt (single-tab variant).
-│       │   │                         MODIFIED: <security> block added.
-│       │   ├── tools/index.ts    Tool definitions (click, input, scroll, etc.)
+│       │   │   └── system_prompt.md
+│       │   ├── tools/index.ts
 │       │   └── utils/
-│       │       ├── index.ts      llms.txt fetcher, assert helper
-│       │       └── autoFixer.ts  Automatic JSON repair for malformed LLM output
+│       │       ├── index.ts
+│       │       └── autoFixer.ts
 │       ├── llms/
-│       │   ├── OpenAIClient.ts   OpenAI-compatible HTTP client with streaming
-│       │   ├── types.ts          LLM request/response types
-│       │   ├── utils.ts          Retry logic, token counting
-│       │   └── errors.ts         Typed error classes
+│       │   ├── OpenAIClient.ts
+│       │   ├── types.ts
+│       │   ├── utils.ts
+│       │   └── errors.ts
 │       └── page-controller/
-│           ├── PageController.ts     Main controller (read DOM, execute actions)
-│           ├── actions.ts            Action executor (click, type, scroll, etc.)
+│           ├── PageController.ts
+│           ├── actions.ts
+│           ├── env.d.ts
 │           ├── dom/
-│           │   ├── getPageInfo.ts    DOM → accessible tree + interactive elements
-│           │   └── dom_tree/         DOM tree serialisation (compiled JS + types)
-│           └── mask/
-│               ├── SimulatorMask.ts  Transparent overlay with animated cursor
-│               ├── SimulatorMask.module.css
-│               ├── cursor.module.css
-│               ├── cursor-border.svg
-│               ├── cursor-fill.svg
-│               └── checkDarkMode.ts  Detects dark mode for overlay styling
+│           │   ├── getPageInfo.ts
+│           │   ├── index.ts
+│           │   └── dom_tree/     (index.js + index.d.ts + type.ts)
+│           ├── mask/
+│           │   ├── SimulatorMask.ts
+│           │   ├── SimulatorMask.module.css
+│           │   ├── cursor.module.css
+│           │   ├── cursor-border.svg
+│           │   ├── cursor-fill.svg
+│           │   └── checkDarkMode.ts
+│           ├── patches/
+│           │   ├── antd.ts
+│           │   └── react.ts
+│           └── utils/index.ts
 │
-├── proxy/
-│   └── server.mjs            DEPRECATED. Throws immediately on start.
-│                             Was the old Node.js capture server.
-│                             Replaced by PRIVO-page-agent-ext-be.
-│
-├── docs/
-│   └── FEASIBILITY.md        Technical feasibility notes (design archive)
-│
-├── .env                      VITE_EXTENSION_SECRET (never commit — gitignored)
+├── .env                          VITE_EXTENSION_SECRET (gitignored — never commit)
+├── .env.example                  Safe template — copy to .env and fill in secret
 ├── .gitignore
-├── NOTICE.md                 Third-party attribution notices
+├── NOTICE.md                     Third-party attribution (MIT upstream)
 ├── package.json
-└── tsconfig (inferred from vite build configs)
+├── tsconfig.json
+└── yarn.lock
 ```
 
 ---
