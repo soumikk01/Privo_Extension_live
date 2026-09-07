@@ -7,12 +7,12 @@
  *   • /v1/*:          no authentication  (open LLM proxy at operator's expense)
  *   • GET  /validate: stored XSS via innerHTML with unsanitised database fields
  *
- * Use the Fastify backend at deccan-page-agent-ext-be/ instead:
- *   cd ../deccan-page-agent-ext-be && npm run dev
+ * Use the Fastify backend at PRIVO-page-agent-ext-be/ instead:
+ *   cd ../PRIVO-page-agent-ext-be && npm run dev
  *
  * This file is kept only for historical reference. Never run it in any environment.
  */
-throw new Error('DEPRECATED: use deccan-page-agent-ext-be instead. See comment above.')
+throw new Error('DEPRECATED: use PRIVO-page-agent-ext-be instead. See comment above.')
 
 /**
  * Original file kept below for reference only.
@@ -81,7 +81,7 @@ const server = createServer(async (req, res) => {
 	}
 
 	// -- health --
-	if (url.pathname === '/health') return json(res, 200, { ok: true, service: 'deccan-capture' })
+	if (url.pathname === '/health') return json(res, 200, { ok: true, service: 'PRIVO-capture' })
 
 	// -- capture registry --
 	if (url.pathname === '/captures' && req.method === 'POST') {
@@ -158,7 +158,7 @@ const server = createServer(async (req, res) => {
 })
 
 server.listen(PORT, () => {
-	console.log(`Deccan Capture backend on http://localhost:${PORT}`)
+	console.log(`PRIVO Capture backend on http://localhost:${PORT}`)
 	console.log(`  LLM proxy   → ${UPSTREAM} ${API_KEY ? '(key loaded)' : '(NO KEY — set .env)'}`)
 	console.log(`  Validation  → http://localhost:${PORT}/validate`)
 	console.log(`  Registry    → ${Object.keys(db).length} sealed capture(s)`)
@@ -168,7 +168,7 @@ server.listen(PORT, () => {
 
 const VALIDATE_PAGE = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Deccan Capture Validator</title>
+<title>PRIVO Capture Validator</title>
 <style>
 :root{--bg:#F6F3F0;--surface:#fff;--ink:#111113;--ink2:#56555E;--line:#E2DCD5;--accent:#175FFF;--good:#0E7A46;--goods:#DDF2E6;--bad:#B3261E;--bads:#F9E2E0}
 @media(prefers-color-scheme:dark){:root{--bg:#111113;--surface:#1B1B1F;--ink:#F2F0ED;--ink2:#B6B4BC;--line:#2B2B31;--accent:#5F8DFF;--good:#58C68C;--goods:#14301F;--bad:#F28B82;--bads:#3A1917}}
@@ -187,7 +187,7 @@ h1{margin:0 0 6px;font-size:22px;font-weight:800}p{color:var(--ink2);margin:0 0 
 input[type=file]{display:none}
 </style></head><body>
 <div class="card">
-<p class="eyebrow">Deccan AI</p><h1>Capture Validator</h1>
+<p class="eyebrow">PRIVO AI</p><h1>Capture Validator</h1>
 <p>Drop a sealed capture PNG here. Its SHA-256 is recomputed locally and checked against the registry — any pixel changed since sealing means no match.</p>
 <label class="drop" id="drop">Click or drop a PNG to validate<input type="file" id="file" accept="image/png"></label>
 <div class="result" id="result"></div>

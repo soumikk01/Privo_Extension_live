@@ -1,6 +1,6 @@
-# Deccan Page Agent — Chrome Extension
+# PRIVO Page Agent — Chrome Extension
 
-Internal Deccan AI tool. Automates browser tasks with natural language and produces cryptographically sealed page captures — PNG screenshots watermarked with a tamper-evident badge whose SHA-256 hash is registered on a backend server, so any later pixel edit breaks verification.
+Internal PRIVO AI tool. Automates browser tasks with natural language and produces cryptographically sealed page captures — PNG screenshots watermarked with a tamper-evident badge whose SHA-256 hash is registered on a backend server, so any later pixel edit breaks verification.
 
 > **Requires Chrome 116+** (Manifest V3 side panel API, minimum version for `chrome.sidePanel`).
 
@@ -51,8 +51,8 @@ When you or the agent need a screenshot as proof, the extension produces a **sea
 ## How the two repos relate
 
 ```text
-deccan-page-agent/          ← this repo  (Chrome extension)
-deccan-page-agent-ext-be/   ← separate   (Fastify backend server)
+PRIVO-page-agent/          ← this repo  (Chrome extension)
+PRIVO-page-agent-ext-be/   ← separate   (Fastify backend server)
 ```
 
 The extension and the backend communicate over plain HTTP on `localhost:8787`. The backend:
@@ -123,7 +123,7 @@ Understanding these makes the architecture obvious:
                 │  HTTP localhost:8787
                 ▼
 ┌────────────────────────────────┐
-│  Backend (deccan-page-agent-   │  POST /captures  (register hash)
+│  Backend (PRIVO-page-agent-   │  POST /captures  (register hash)
 │  ext-be)                       │  GET  /captures/:sha  (verify)
 │                                │  ALL  /v1/*     (LLM proxy)
 └────────────────────────────────┘
@@ -275,7 +275,7 @@ Sends a `SCREENSHOT_CONTROL` message to the background service worker, which cal
 **Step 3 — Watermark**
 `watermarkImage()` (in `src/panel/watermark.ts`) draws on a canvas:
 - The original capture, pixel-for-pixel
-- A rounded-rectangle badge in the bottom-right corner with a dark semi-transparent background, the `// DECCAN VERIFIED` brand in blue, and the capture ID, timestamp (UTC), and hostname in light text
+- A rounded-rectangle badge in the bottom-right corner with a dark semi-transparent background, the `// PRIVO VERIFIED` brand in blue, and the capture ID, timestamp (UTC), and hostname in light text
 - Text size scales with the image width to remain legible on hi-DPI captures
 
 The badge text adapts to available width — it tries the full `ID · timestamp · host` variant first, falls back to `ID · timestamp`, then just `ID`.
@@ -300,7 +300,7 @@ The sealed PNG data-URL is prepended to `captures` in `chrome.storage.local`. Th
 - **`PageController`** — DOM tree extraction (accessible tree format), element highlighting, action execution
 - **`SimulatorMask`** — a transparent overlay that shows a visual cursor indicator while the agent is operating on the page
 
-Deccan-specific changes are **not** made inside `src/vendor/`. All customisations live in `src/agent/`, `src/panel/`, and `src/tools/`. The exception is security patches applied to `vendor/core/PageAgentCore.ts` (prompt injection sanitisation) — these are documented in the source with inline comments.
+PRIVO-specific changes are **not** made inside `src/vendor/`. All customisations live in `src/agent/`, `src/panel/`, and `src/tools/`. The exception is security patches applied to `vendor/core/PageAgentCore.ts` (prompt injection sanitisation) — these are documented in the source with inline comments.
 
 ---
 
@@ -331,7 +331,7 @@ The agent runs on the Anthropic API via the OpenAI-compatible endpoint. These ar
 ## Project layout (every file explained)
 
 ```text
-deccan-page-agent/
+PRIVO-page-agent/
 │
 ├── build/
 │   ├── shared.ts                 Shared Vite plugin config (alias resolution,
@@ -493,7 +493,7 @@ deccan-page-agent/
 ├── proxy/
 │   └── server.mjs            DEPRECATED. Throws immediately on start.
 │                             Was the old Node.js capture server.
-│                             Replaced by deccan-page-agent-ext-be.
+│                             Replaced by PRIVO-page-agent-ext-be.
 │
 ├── docs/
 │   └── FEASIBILITY.md        Technical feasibility notes (design archive)
@@ -542,7 +542,7 @@ vite build -c build/vite.content.ts
 
 - Node.js 18+ and Yarn
 - Google Chrome 116+
-- The backend running at `http://localhost:8787` (see `deccan-page-agent-ext-be/README.md`)
+- The backend running at `http://localhost:8787` (see `PRIVO-page-agent-ext-be/README.md`)
 
 ### 1. Install dependencies
 
@@ -559,7 +559,7 @@ The `.env` already has a generated `VITE_EXTENSION_SECRET`. Verify it matches `E
 grep VITE_EXTENSION_SECRET .env
 
 # Backend (from the other repo):
-grep EXTENSION_SECRET ../deccan-page-agent-ext-be/.env
+grep EXTENSION_SECRET ../PRIVO-page-agent-ext-be/.env
 ```
 
 Both values must be identical. If they differ, generate a fresh pair:
@@ -573,7 +573,7 @@ openssl rand -hex 32
 ### 3. Start the backend
 
 ```bash
-cd ../deccan-page-agent-ext-be
+cd ../PRIVO-page-agent-ext-be
 npm run dev
 # Backend is ready at http://localhost:8787
 ```
@@ -590,9 +590,9 @@ yarn build
 1. Open `chrome://extensions` in Chrome
 2. Toggle **Developer mode** on (top-right switch)
 3. Click **Load unpacked** and select the `dist/` folder in this repo
-4. The Deccan Page Agent icon appears in the toolbar
-5. Click the puzzle icon in the toolbar → find **Deccan Page Agent** → click the pin icon
-6. Navigate to any webpage and click the Deccan Page Agent icon
+4. The PRIVO Page Agent icon appears in the toolbar
+5. Click the puzzle icon in the toolbar → find **PRIVO Page Agent** → click the pin icon
+6. Navigate to any webpage and click the PRIVO Page Agent icon
 7. The side panel opens on the right side of the page
 
 ### 6. Verify the setup
@@ -605,7 +605,7 @@ In the side panel footer:
 
 ```bash
 yarn package
-# produces deccan-page-agent-ext.zip in the repo root
+# produces PRIVO-page-agent-ext.zip in the repo root
 # upload this file to the Chrome Web Store or distribute internally
 ```
 
@@ -635,7 +635,7 @@ yarn build        # Full rebuild of all three bundles
 **Chrome does not hot-reload extensions.** After every `yarn build`:
 
 1. Go to `chrome://extensions`
-2. Find Deccan Page Agent
+2. Find PRIVO Page Agent
 3. Click the circular arrow (reload) icon
 
 If the panel is already open, close and reopen it after reloading.
@@ -790,7 +790,7 @@ The wall-clock time per agent step has two components: **LLM latency** (irreduci
 ## Troubleshooting
 
 **Red dot in footer (backend offline)**
-- Make sure `npm run dev` is running in `deccan-page-agent-ext-be`
+- Make sure `npm run dev` is running in `PRIVO-page-agent-ext-be`
 - Check `http://localhost:8787/health` in a browser tab
 - Verify `VITE_EXTENSION_SECRET` in this repo's `.env` matches `EXTENSION_SECRET` in the backend's `.env`
 - Rebuild the extension after changing `.env`: `yarn build`
@@ -801,7 +801,7 @@ The wall-clock time per agent step has two components: **LLM latency** (irreduci
 - Make sure `EXTENSION_SECRET` matches on both sides
 
 **Chrome shows "Extension errors" badge**
-- Open `chrome://extensions` → click **Errors** on the Deccan Page Agent card
+- Open `chrome://extensions` → click **Errors** on the PRIVO Page Agent card
 - Common cause: service worker crashed — check for TypeScript errors after a build
 
 **Panel does not open on toolbar click**

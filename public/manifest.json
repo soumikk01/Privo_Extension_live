@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Privo",
     "version": "0.1.0",
-    "description": "Control web pages with natural language: multi-tab automation plus screenshot capture. Internal Deccan AI tool.",
+    "description": "Control web pages with natural language: multi-tab automation plus screenshot capture. Internal PRIVO AI tool.",
     "minimum_chrome_version": "116",
     "permissions": ["tabs", "tabGroups", "sidePanel", "storage", "unlimitedStorage", "debugger"],
     "host_permissions": ["<all_urls>"],

@@ -2324,23 +2324,23 @@ ${scrollHintAbove}`;
           el.style.visibility = "hidden";
           return { el, vis };
         });
-        window.__deccanHiddenFixed = hidden;
-        window.__deccanPrevOverflowAnchor = document.documentElement.style.overflowAnchor;
+        window.__PRIVOHiddenFixed = hidden;
+        window.__PRIVOPrevOverflowAnchor = document.documentElement.style.overflowAnchor;
         document.documentElement.style.overflowAnchor = "none";
         sendResponse({ success: true });
         return;
       }
       if (action === "restore_fixed_elements") {
-        const hidden = window.__deccanHiddenFixed;
+        const hidden = window.__PRIVOHiddenFixed;
         if (hidden) {
           hidden.forEach(({ el, vis }) => {
             el.style.visibility = vis;
           });
-          delete window.__deccanHiddenFixed;
+          delete window.__PRIVOHiddenFixed;
         }
-        if ("__deccanPrevOverflowAnchor" in window) {
-          document.documentElement.style.overflowAnchor = window.__deccanPrevOverflowAnchor ?? "";
-          delete window.__deccanPrevOverflowAnchor;
+        if ("__PRIVOPrevOverflowAnchor" in window) {
+          document.documentElement.style.overflowAnchor = window.__PRIVOPrevOverflowAnchor ?? "";
+          delete window.__PRIVOPrevOverflowAnchor;
         }
         maskLockedUntil = 0;
         sendResponse({ success: true });
@@ -2399,7 +2399,7 @@ ${scrollHintAbove}`;
         throw new Error(`[RemotePageController] unknown action: ${action}`);
     }
   }
-  console.debug("[Content] Deccan Page Agent loaded on", window.location.href);
+  console.debug("[Content] PRIVO Page Agent loaded on", window.location.href);
   initPageController();
   /**
    * AI Motion - WebGL2 animated border with AI-style glow effects

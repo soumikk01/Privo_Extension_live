@@ -398,7 +398,7 @@ async function resolveTargetTab(targetTabId) {
   if (!active) throw new Error("No active tab found.");
   return active;
 }
-console.log("[Background] Deccan Page Agent service worker started");
+console.log("[Background] PRIVO Page Agent service worker started");
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (sender.id !== chrome.runtime.id) {
     sendResponse({ error: "Unauthorized sender" });

@@ -24,7 +24,7 @@ export async function watermarkImage(dataUrl: string, meta: CaptureMeta): Promis
 
 	const ts = new Date(meta.capturedAt).toISOString().replace('T', ' ').slice(0, 16) + ' UTC'
 	const host = safeHost(meta.url)
-	const brand = 'DECCAN'
+	const brand = 'PRIVO'
 	const brandW = ctx.measureText(brand).width
 
 	const sep = '  ·  '

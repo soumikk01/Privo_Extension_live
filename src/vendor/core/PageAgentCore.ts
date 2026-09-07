@@ -11,7 +11,7 @@ import * as z from 'zod/v4'
 import SYSTEM_PROMPT from './prompts/system_prompt.md?raw'
 import { tools } from './tools'
 
-// [deccan security] Neutralise prompt-injection via browser content and history.
+// [PRIVO security] Neutralise prompt-injection via browser content and history.
 //
 // Full XML escaping (<, >) would break the [n]<tag>text</tag> page-element
 // format the LLM must read literally. Instead, only escape the opening '<' of
@@ -645,7 +645,7 @@ export class PageAgentCore extends EventTarget {
 			if (event.type === 'step') {
 				stepIndex++
 				prompt += `<step_${stepIndex}>\n`
-				// [deccan security] sanitize all history fields — reflection values come from
+				// [PRIVO security] sanitize all history fields — reflection values come from
 				// the LLM's own output, but a malicious page can trick the LLM into writing
 				// injection payloads into its memory that then appear verbatim in future steps.
 				prompt += `Evaluation of Previous Step: ${sanitizeBrowserContent(String(event.reflection.evaluation_previous_goal ?? ''))}\n`
@@ -672,7 +672,7 @@ export class PageAgentCore extends EventTarget {
 			pageContent = await this.config.transformPageContent(pageContent)
 		}
 
-		// [deccan security] Strip prompt-structure tags from browser-state fields.
+		// [PRIVO security] Strip prompt-structure tags from browser-state fields.
 		// A malicious page could embed </browser_state><system>… to inject
 		// instructions the LLM would treat as authoritative.
 		prompt += '<browser_state>\n'

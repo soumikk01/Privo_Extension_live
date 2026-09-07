@@ -29,7 +29,7 @@ export function initPageController() {
 	}
 
 	intervalID = window.setInterval(async () => {
-		// [deccan] added: when the extension is reloaded/updated, content scripts from
+		// [PRIVO] added: when the extension is reloaded/updated, content scripts from
 		// the previous version keep running but lose their runtime context. Detect that
 		// and shut this instance down instead of throwing "Extension context invalidated"
 		// on every tick. The new version's content script takes over on page reload.
@@ -52,7 +52,7 @@ export function initPageController() {
 		const isAgentRunning = (await chrome.storage.local.get('isAgentRunning')).isAgentRunning
 		const currentTabId = (await chrome.storage.local.get('currentTabId')).currentTabId
 
-		// [deccan] added: maskSuppressed is set by the panel right before a sealed
+		// [PRIVO] added: maskSuppressed is set by the panel right before a sealed
 		// capture so the gradient border + simulated cursor never appear in evidence.
 		const maskSuppressed = (await chrome.storage.local.get('maskSuppressed')).maskSuppressed
 
@@ -123,7 +123,7 @@ export function initPageController() {
 			return
 		}
 
-		// [deccan] added: instantly remove the visual overlay (gradient border +
+		// [PRIVO] added: instantly remove the visual overlay (gradient border +
 		// simulated cursor) before a sealed capture. hideMask() only fades out —
 		// dispose() removes the DOM immediately, so evidence never contains it.
 		if (action === 'hide_mask_now') {
@@ -156,25 +156,25 @@ export function initPageController() {
 				el.style.visibility = 'hidden'
 				return { el, vis }
 			})
-			;(window as any).__deccanHiddenFixed = hidden
+			;(window as any).__PRIVOHiddenFixed = hidden
 			// Scroll anchoring can silently move scrollY after a scroll settles when
 			// lazy content loads above the viewport — disable it for the capture.
-			;(window as any).__deccanPrevOverflowAnchor = document.documentElement.style.overflowAnchor
+			;(window as any).__PRIVOPrevOverflowAnchor = document.documentElement.style.overflowAnchor
 			document.documentElement.style.overflowAnchor = 'none'
 			sendResponse({ success: true })
 			return
 		}
 
 		if (action === 'restore_fixed_elements') {
-			const hidden = (window as any).__deccanHiddenFixed as Array<{ el: HTMLElement; vis: string }> | undefined
+			const hidden = (window as any).__PRIVOHiddenFixed as Array<{ el: HTMLElement; vis: string }> | undefined
 			if (hidden) {
 				hidden.forEach(({ el, vis }) => { el.style.visibility = vis })
-				delete (window as any).__deccanHiddenFixed
+				delete (window as any).__PRIVOHiddenFixed
 			}
-			if ('__deccanPrevOverflowAnchor' in window) {
+			if ('__PRIVOPrevOverflowAnchor' in window) {
 				document.documentElement.style.overflowAnchor =
-					((window as any).__deccanPrevOverflowAnchor as string) ?? ''
-				delete (window as any).__deccanPrevOverflowAnchor
+					((window as any).__PRIVOPrevOverflowAnchor as string) ?? ''
+				delete (window as any).__PRIVOPrevOverflowAnchor
 			}
 			maskLockedUntil = 0
 			sendResponse({ success: true })

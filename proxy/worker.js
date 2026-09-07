@@ -1,12 +1,12 @@
 /**
- * Deccan Page Agent — LLM proxy as a Cloudflare Worker.
+ * PRIVO Page Agent — LLM proxy as a Cloudflare Worker.
  *
  * Deploy:
- *   npx wrangler deploy proxy/worker.js --name deccan-llm-proxy
+ *   npx wrangler deploy proxy/worker.js --name PRIVO-llm-proxy
  *   npx wrangler secret put ANTHROPIC_API_KEY
  *
  * Then in src/config.ts:
- *   baseURL: 'https://deccan-llm-proxy.<your-subdomain>.workers.dev/v1'
+ *   baseURL: 'https://PRIVO-llm-proxy.<your-subdomain>.workers.dev/v1'
  */
 const UPSTREAM = 'https://api.anthropic.com'
 

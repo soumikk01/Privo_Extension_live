@@ -7068,7 +7068,7 @@ class MultiPageAgent extends PageAgentCore {
       // Disabled: AbortSignal cannot cross contexts
       experimentalScriptExecutionTool: false,
       pageController,
-      // [deccan] modified: merge caller-provided customTools (e.g. capture_screenshot)
+      // [PRIVO] modified: merge caller-provided customTools (e.g. capture_screenshot)
       // instead of overwriting them with the tab tools.
       customTools: { ...customTools, ...config2.customTools },
       customSystemPrompt: systemPrompt,
@@ -7144,7 +7144,7 @@ async function watermarkImage(dataUrl, meta) {
   ctx.font = `600 ${fontS}px ui-monospace, 'SF Mono', 'Courier New', monospace`;
   const ts = new Date(meta.capturedAt).toISOString().replace("T", " ").slice(0, 16) + " UTC";
   const host = safeHost(meta.url);
-  const brand = "DECCAN";
+  const brand = "PRIVO";
   const brandW = ctx.measureText(brand).width;
   const sep = "  ·  ";
   const variants = [
@@ -7419,13 +7419,13 @@ async function pollBackend() {
     backendDot.title = r.ok ? "Backend online — captures are registered" : "Backend error";
   } catch {
     backendDot.className = "backend-dot bad";
-    backendDot.title = "Backend offline — captures will be watermarked but not registered. Run: npm run dev (in deccan-page-agent-ext-be)";
+    backendDot.title = "Backend offline — captures will be watermarked but not registered. Run: npm run dev (in PRIVO-page-agent-ext-be)";
   }
 }
 void pollBackend();
 setInterval(() => void pollBackend(), 15e3);
 const FLOW_INSTRUCTIONS = `
-You are Deccan Verified Capture: you complete web tasks INCLUDING logins, pausing for the user whenever their input is needed.
+You are PRIVO Verified Capture: you complete web tasks INCLUDING logins, pausing for the user whenever their input is needed.
 
 RULES FOR USER INPUT (critical):
 - Whenever the task needs something only the user knows (email, username, OTP code, verification code, a choice between options), PAUSE and call ask_user with ONE short, specific question. Continue with the answer.
@@ -7569,7 +7569,7 @@ $("capture-now").addEventListener("click", async () => {
 function downloadCapture(c) {
   const a = document.createElement("a");
   a.href = c.dataUrl;
-  a.download = `deccan-capture-${c.id}.png`;
+  a.download = `PRIVO-capture-${c.id}.png`;
   a.click();
 }
 async function renderShots() {

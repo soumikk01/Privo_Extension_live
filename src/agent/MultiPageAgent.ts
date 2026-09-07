@@ -40,7 +40,7 @@ export class MultiPageAgent extends PageAgentCore {
 			// Disabled: AbortSignal cannot cross contexts
 			experimentalScriptExecutionTool: false,
 			pageController: pageController as any,
-			// [deccan] modified: merge caller-provided customTools (e.g. capture_screenshot)
+			// [PRIVO] modified: merge caller-provided customTools (e.g. capture_screenshot)
 			// instead of overwriting them with the tab tools.
 			customTools: { ...customTools, ...config.customTools },
 			customSystemPrompt: systemPrompt,

@@ -2,7 +2,7 @@ import { handlePageControlMessage } from '../agent/RemotePageController.backgrou
 import { handleTabControlMessage } from '../agent/TabsController.background'
 import { handleScreenshotMessage } from '../tools/screenshot.background'
 
-console.log('[Background] Deccan Page Agent service worker started')
+console.log('[Background] PRIVO Page Agent service worker started')
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse): true | undefined => {
 	// Reject messages from outside this extension before dispatching.

@@ -16,9 +16,9 @@ ANTHROPIC_API_KEY=sk-ant-... node proxy/server.mjs
 ## Cloud (Cloudflare Worker, free tier is plenty)
 
 ```bash
-npx wrangler deploy proxy/worker.js --name deccan-llm-proxy
+npx wrangler deploy proxy/worker.js --name PRIVO-llm-proxy
 npx wrangler secret put ANTHROPIC_API_KEY
-# → https://deccan-llm-proxy.<subdomain>.workers.dev/v1
+# → https://PRIVO-llm-proxy.<subdomain>.workers.dev/v1
 ```
 
 ## Point the extension at it
